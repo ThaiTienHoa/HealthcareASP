@@ -1,0 +1,78 @@
+﻿@model HealthCare.Entities.Appoiment
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+<h4>Appointment</h4>
+<hr />
+@using (Html.BeginForm("Create", "Appointment", FormMethod.Post, new { @id = "form-1" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger"})
+    <div class="row">
+        <div class="col-md-4">
+            <input type="hidden" asp-for="doctorId" value="@ViewBag.doctorId" />
+            <div class="form-group">
+                <label asp-for="appDate" class="control-label"></label><small class="text-danger">(*)</small>
+                <input asp-for="appDate" type="datetime-local" class="form-control" />
+                <span class="form-message text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="reason" class="control-label"></label><small class="text-danger">(*)</small>
+                <input asp-for="reason" class="form-control" />
+                <span class="form-message text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="description" class="control-label"></label>
+                <input asp-for="description" class="form-control" />
+                <span class="form-message text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="doctorId" class="control-label"></label><small class="text-danger">(*)</small>
+                <select asp-for="doctorId" class="form-control" asp-items="@ViewBag.doctorId">
+                    <option value="" selected disabled>-- Vui lòng chọn Bác sĩ --</option>
+                </select>
+                <span class="form-message text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="patientId" class="control-label"></label>
+                <input asp-for="patientId" class="form-control" />
+                <span class="form-message text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="meta" class="control-label"></label>
+                <input asp-for="meta" class="form-control" />
+                <span class="form-message text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="status" class="control-label"></label><small class="text-danger">(*)</small>
+                <select asp-for="status" class="form-control">
+                    <option value="true">Active</option>
+                    <option value="false">Inactive</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <button type="submit" class="btn btn-green">Create</button>
+        <a asp-action="Index" asp-route-userId="@ViewBag.userId" class="btn btn-light">Back to List</a>
+    </div>
+}
+
+
+<script src="~/js/validator.js"></script>
+<script>
+    Validator({
+        form: '#form-1',
+        formGroupSelector: '.form-group',
+        errorSelector: '.form-message',
+        rules: [
+            Validator.isRequired('#appDate'), 
+            Validator.isRequired('#reason'),  
+            Validator.isRequired('#status')   
+        ],
+    });
+</script>
+

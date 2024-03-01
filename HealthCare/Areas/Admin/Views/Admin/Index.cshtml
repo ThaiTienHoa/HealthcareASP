@@ -1,0 +1,94 @@
+﻿@model IEnumerable<HealthCare.Areas.Admin.Models.UserModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a class="a-green" asp-action="Create">Create New</a>
+</p>
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>STT</th>
+            <th>
+                @Html.DisplayNameFor(model => model.avatar)
+            </th>
+            <th>Họ tên</th>
+            <th>
+                @Html.DisplayNameFor(model => model.PhoneNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.role)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.updateAt)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            var i = 1;
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="align-middle">@i</td>
+                    <td class="align-middle">
+                        @if (item.avatar == "")
+                        {
+                            <img src="~/img/avatar.png" alt="user" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover;" />
+                        }
+                        else
+                        {
+                            <img src=@Url.Content(item.avatar) alt="user" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover;" />
+                        }
+                    </td>
+                    <td class="align-middle">
+                        @item.lastName<span> </span>@item.firstName
+                    </td>
+                    <td class="align-middle">
+                        @Html.DisplayFor(modelItem => item.PhoneNumber)
+                    </td>
+                    <td class="align-middle">
+                        @Html.DisplayFor(modelItem => item.role)
+                    </td>
+                    <td class="text-center align-middle">
+                        @if (item.status == true)
+                        {
+                            <i class="fa fa-circle text-success font-12" data-toggle="tooltip" data-placement="top" title="Checked"></i>
+                        }
+                        else
+                        {
+                            <i class="fa fa-circle text-danger font-12" data-toggle="tooltip" data-placement="top" title="Unchecked"></i>
+                        }
+                    </td>                   
+                    <td class="align-middle">
+                        @Html.DisplayFor(modelItem => item.updateAt)
+                    </td>
+                    <td class="align-middle">
+                        <a asp-action="Edit" asp-route-id="@item.Id" title="Edit" class="btn btn-outline-warning">
+                            <i class="fa-solid fa-pen"></i>
+                        </a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" title="Delete" class="btn btn-outline-danger">
+                            <i class="fa-solid fa-trash"></i>
+                        </a>
+                        <a asp-controller="DoctorInfoCRUD" asp-action="Index" asp-route-userId="@item.Id" title="Update DoctorInfo" class="btn btn-outline-primary">
+                            <i class="fa-solid fa-stethoscope"></i>
+                        </a>
+                        <a asp-controller="PatientInfoCRUD" asp-action="Index" asp-route-userId="@item.Id" title="Update PatientInfo" class="btn btn-outline-info">
+                            <i class="fa-solid fa-bed-pulse"></i>
+                        </a>
+                    </td>
+                </tr>
+                i++;
+            }
+        }
+    </tbody>
+</table>

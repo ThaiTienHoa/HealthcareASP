@@ -1,0 +1,77 @@
+﻿@model IEnumerable<HealthCare.Entities.Appoiment>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a class="a-green" asp-action="Create" asp-route-userId="@ViewBag.userId">Create New</a>
+</p>
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.appDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.reason)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.meta)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.createAt)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var appointment in Model)
+        {
+            <tr>
+                <td class="align-middle">
+                    @Html.DisplayFor(modelItem => appointment.appDate)
+                </td>
+                <td class="align-middle">
+                    @Html.DisplayFor(modelItem => appointment.reason)
+                </td>
+                <td class="align-middle">
+                    @Html.DisplayFor(modelItem => appointment.description)
+                </td>
+                <td class="align-middle">
+                    @if (appointment.status.HasValue && appointment.status.Value)
+                    {
+                        <span class="text-success">Checked</span>
+                    }
+                    else
+                    {
+                        <span class="text-danger">Unchecked</span>
+                    }
+                </td>
+                <td class="align-middle">
+                    @Html.DisplayFor(modelItem => appointment.createAt)
+                </td>
+                <td class="align-middle">
+                    @Html.DisplayFor(modelItem => appointment.updateAt)
+                </td>
+            </tr>
+
+        <td class="align-middle">
+            <a asp-action="Edit" asp-route-id="@appointment.appoimentId" title="Edit" class="btn btn-outline-warning">
+                <i class="fa-solid fa-pen"></i>
+            </a>
+            <a asp-action="Delete" asp-route-id="@appointment.appoimentId" title="Delete" class="btn btn-outline-danger">
+                <i class="fa-solid fa-trash"></i>
+            </a>
+        </td>
+        }
+    </tbody>
+</table>

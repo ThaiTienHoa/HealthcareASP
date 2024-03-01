@@ -1,0 +1,56 @@
+﻿@model HealthCare.Models.LoginModel
+
+@{
+    ViewData["Title"] = "Đăng nhập";
+}
+
+<div id="LoginPartial">
+    <div class="container my-5">
+        <h1 class="text-center">@ViewData["Title"]</h1>
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <div id="alert_placeholder_login"></div>
+                @using (Html.BeginForm("Login", "UserAuth", FormMethod.Post, new { @id = "UserLoginForm" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+              
+                    <input type="hidden" asp-for="loginInValid">
+
+                    <div class="form-group">
+                        <label asp-for="phoneNumber" class="control-label"></label><small class="text-danger">(*)</small>
+                        <input asp-for="phoneNumber" class="form-control" />
+                        <span class="form-message text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="password" class="control-label"></label><small class="text-danger">(*)</small>
+                        <input asp-for="password" class="form-control" />
+                        <span class="form-message text-danger"></span>
+                    </div>
+                    <div class="form-inline justify-content-between">
+                        <a asp-action="Register" class="a-green">Chưa có tài khoản?</a>
+                        <button name="login" type="button" class="btn btn-green">Đăng nhập</button>
+                    </div>
+                }              
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/user-login.js" asp-append-version="true"></script>
+    <script src="~/js/bootstrap-alert.js" asp-append-version="true"></script>
+    <script src="~/js/validator.js"></script>
+
+    <script>
+        Validator({
+            form: '#UserLoginForm',
+            formGroupSelector: '.form-group',
+            errorSelector: '.form-message',
+            rules: [
+                Validator.isRequired('#phoneNumber'),
+                Validator.isRequired('#password'),
+            ],
+        });
+    </script>
+}

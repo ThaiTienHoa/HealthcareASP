@@ -1,0 +1,77 @@
+﻿@model HealthCare.Models.RegistrationModel
+
+@{
+    ViewData["Title"] = "Đăng ký";
+}
+
+<div id="RegisterPartial">
+    <div class="container my-5">
+        <h1 class="text-center">@ViewData["Title"]</h1>
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <div id="alert_placeholder_register"></div>
+                @using (Html.BeginForm("Register", "UserAuth", FormMethod.Post, new { @id = "UserRegisterForm" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                    <input type="hidden" asp-for="registrationInValid">
+                    <div class="form-group">
+                        <label asp-for="lastName" class="control-label"></label><small class="text-danger">(*)</small>
+                        <input asp-for="lastName" class="form-control" />
+                        <span class="form-message text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="firstName" class="control-label"></label><small class="text-danger">(*)</small>
+                        <input asp-for="firstName" class="form-control" />
+                        <span class="form-message text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="phoneNumber" class="control-label"></label><small class="text-danger">(*)</small>
+                        <input asp-for="phoneNumber" class="form-control" />
+                        <span class="form-message text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="password" class="control-label"></label><small class="text-danger">(*)</small>
+                        <input asp-for="password" class="form-control" />
+                        <span class="form-message text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="confirmPassword" class="control-label"></label><small class="text-danger">(*)</small>
+                        <input asp-for="confirmPassword" class="form-control" />
+                        <span class="form-message text-danger"></span>
+                    </div>
+                    <div class="form-inline justify-content-between">
+                        <a asp-action="Login" class="a-green">Đã có tài khoản?</a>
+                        <button name="register" type="button" class="btn btn-green">Đăng ký</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/user-registration.js" asp-append-version="true"></script>
+    <script src="~/js/bootstrap-alert.js" asp-append-version="true"></script>
+    <script src="~/js/validator.js"></script>
+
+    <script>
+        Validator({
+            form: '#UserRegisterForm',
+            formGroupSelector: '.form-group',
+            errorSelector: '.form-message',
+            rules: [
+                Validator.isRequired('#lastName'),
+                Validator.isRequired('#firstName'),
+                Validator.isRequired('#phoneNumber'),
+                Validator.isRequired('#password'),
+                Validator.isRequired('#confirmPassword'),
+                Validator.isPhone('#phoneNumber'),
+                Validator.isConfirmed('#confirmPassword', function () {
+                    return document.querySelector('#UserRegisterForm #password').value;
+                }, 'Mật khẩu không khớp')
+            ],
+        });
+    </script>
+}

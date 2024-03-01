@@ -1,0 +1,113 @@
+﻿@model IEnumerable<HealthCare.Entities.Specialty>
+
+@{
+    ViewData["Title"] = "Khoa";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a class="a-green" asp-action="Create">Create New</a>
+</p>
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>STT</th>
+            <th>
+                @Html.DisplayNameFor(model => model.specialtyName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.order)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.meta)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.createAt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.updateAt)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            var i = 1;
+            @foreach (var item in Model)
+            {
+                <tr id="row_@item.specialtyId">
+                    <td class="align-middle">@i</td>
+                    <td class="align-middle">
+                        @Html.DisplayFor(modelItem => item.specialtyName)
+                    </td>
+                    <td class="align-middle">
+                        @Html.DisplayFor(modelItem => item.order)
+                    </td>
+                    <td class="align-middle">
+                        @Html.DisplayFor(modelItem => item.meta)
+                    </td>
+                    <td class="text-center align-middle">
+                        @if (item.status == true)
+                        {
+                            <i class="fa fa-circle text-success font-12" data-toggle="tooltip" data-placement="top" title="Checked"></i>
+                        }
+                        else
+                        {
+                            <i class="fa fa-circle text-danger font-12" data-toggle="tooltip" data-placement="top" title="Unchecked"></i>
+                        }
+                    </td>
+                    <td class="align-middle">
+                        @Html.DisplayFor(modelItem => item.createAt)
+                    </td>
+                    <td class="align-middle">
+                        @Html.DisplayFor(modelItem => item.updateAt)
+                    </td>
+                    <td class="align-middle">
+                        <a asp-action="Edit" asp-route-id="@item.specialtyId" title="Edit" class="btn btn-outline-warning">
+                            <i class="fa-solid fa-pen"></i>
+                        </a>
+                        <a href="" id="delete" data-id="@item.specialtyId" title="Delete" class="btn btn-outline-danger">
+                            <i class="fa-solid fa-trash"></i>
+                        </a>
+                        <a asp-controller="SpecializationCRUD" asp-action="Index" asp-route-specialtyId="@item.specialtyId">Update Items</a>
+                        <form asp-action="Delete" id="DeleteForm"></form>
+                    </td>
+                </tr>
+                i++;
+            }
+        }
+    </tbody>
+</table>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $('body').on('click', '#delete', function () {
+                var id = $(this).data("id");
+                var antiForgeryToken = $("#DeleteForm input[name='__RequestVerificationToken']").val();
+                var conf = confirm("Bạn có muốn xóa bản ghi này không?");
+
+                if (conf == true) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/Admin/SpecialtyCRUD/Delete',
+                        data: {
+                            __RequestVerificationToken: antiForgeryToken,
+                            id: id
+                        },
+                        success: function (data) {
+                            if (data.success) {
+                                $('#row_' + id).remove();
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+}

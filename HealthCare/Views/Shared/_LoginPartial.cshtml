@@ -1,0 +1,39 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using HealthCare.Data
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<ul class="navbar-nav">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <li class="nav-item dropdown">
+            <a href="#" class="nav-link dropdown-toggle" role="button" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
+                @User.Identity?.Name!
+            </a>
+       
+            <div class="dropdown-menu m-0" aria-labelledby="navbarDropdown">
+                @if (await UserManager.IsInRoleAsync(UserManager.GetUserAsync(User).Result, "Admin")
+               || await UserManager.IsInRoleAsync(UserManager.GetUserAsync(User).Result, "Patient"))
+                {
+                    <a class="dropdown-item" asp-area="" asp-controller="PatientInfo" asp-action="Index">Hồ sơ bệnh nhân</a>
+                }
+                <a class="dropdown-item" asp-area="" asp-controller="UserAuth" asp-action="UpdateProfile">Thông tin tài khoản</a>
+                <hr class="my-0" />
+                <a class="dropdown-item" asp-area="" asp-controller="UserAuth" asp-action="Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">Đăng xuất</a>
+                @*  <form class="dropdown-item form-inline" asp-area="" asp-controller="UserAuth" asp-action="Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+            <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+            </form> *@
+            </div>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="UserAuth" asp-action="Register">Đăng ký</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="UserAuth" asp-action="Login">Đăng nhập</a>
+        </li>
+    }
+</ul>

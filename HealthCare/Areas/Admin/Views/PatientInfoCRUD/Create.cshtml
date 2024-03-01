@@ -1,0 +1,85 @@
+﻿@model HealthCare.Entities.PatientInfo
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>PatientInfo</h4>
+<hr />
+@using (Html.BeginForm("Create", "PatientInfoCRUD", FormMethod.Post, new { @id = "form-1" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="row">
+        <div class="col-md-4">
+            <input type="hidden" asp-for="userId" value="@ViewBag.userId" />
+
+            <div class="form-group">
+                <label asp-for="fullName" class="control-label"></label><small class="text-danger">(*)</small>
+                <input asp-for="fullName" class="form-control" />
+                <span class="form-message text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="phoneNumber" class="control-label"></label><small class="text-danger">(*)</small>
+                <input asp-for="phoneNumber" class="form-control" />
+                <span class="form-message text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="birthday" class="control-label"></label><small class="text-danger">(*)</small>
+                <input asp-for="birthday" type="date" class="form-control" />
+                <span class="form-message text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="gender" class="control-label"></label><small class="text-danger">(*)</small>
+                <select class="form-control" id="gender" asp-for="gender">
+                    <option value="true">Nam</option>
+                    <option value="false">Nữ</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="insurance" class="control-label"></label>
+                <input asp-for="insurance" class="form-control" />
+                <span class="form-message text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="address" class="control-label"></label><small class="text-danger">(*)</small>
+                <input asp-for="address" class="form-control" />
+                <span class="form-message text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="nationalId" class="control-label"></label>
+                <input asp-for="nationalId" class="form-control" />
+                <span class="form-message text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="job" class="control-label"></label>
+                <input asp-for="job" class="form-control" />
+                <span class="form-message text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <button type="submit" class="btn btn-green">Create</button>
+        <a asp-action="Index" asp-route-userId="@ViewBag.userId" class="btn btn-light">Back to List</a>
+    </div>
+}
+
+<script src="~/js/validator.js"></script>
+<script>
+    Validator({
+        form: '#form-1',
+        formGroupSelector: '.form-group',
+        errorSelector: '.form-message',
+        rules: [
+            Validator.isRequired('#fullName'),
+            Validator.isRequired('#phoneNumber'),
+            Validator.isRequired('#birthday'),
+            Validator.isRequired('#address'),
+            Validator.isPhone('#phoneNumber')
+        ],
+    });
+</script>

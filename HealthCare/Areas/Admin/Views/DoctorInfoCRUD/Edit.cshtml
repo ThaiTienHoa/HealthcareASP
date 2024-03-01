@@ -1,0 +1,121 @@
+﻿@model HealthCare.Entities.DoctorInfo
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>DoctorInfo</h4>
+<hr />
+@using (Html.BeginForm("Edit", "DoctorInfoCRUD", FormMethod.Post, new { @id = "form-1" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <input type="hidden" asp-for="doctorInfoId" />
+    <input type="hidden" asp-for="userId" />
+    <input type="hidden" asp-for="createAt">
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="fullName" class="control-label"></label><small class="text-danger">(*)</small>
+                <input asp-for="fullName" class="form-control" placeholder="Nguyễn Văn A" />
+                <span class="form-message text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="qualification" class="control-label"></label><small class="text-danger">(*)</small>
+                <select class="form-control" asp-for="qualification">
+                    <option value="" selected disabled>-- Vui lòng chọn Học hàm/ Học vị --</option>
+                    <option value="BS">BS</option>
+                    <option value="ThS BS">ThS BS</option>
+                    <option value="TS BS">TS BS</option>
+                    <option value="BSCKI">BSCKI</option>
+                    <option value="BSCKII">BSCKII</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="specialtyId" class="control-label"></label><small class="text-danger">(*)</small>
+                <select asp-for="specialtyId" class="form-control" asp-items="@ViewBag.specialtyId">
+                    <option value="" selected disabled>-- Vui lòng chọn Khoa --</option>
+                </select>
+                <span class="form-message text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="phoneNumber" class="control-label"></label><small class="text-danger">(*)</small>
+                <input asp-for="phoneNumber" class="form-control" placeholder="(+84)xxxxxxxxx" />
+                <span class="form-message text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="email" class="control-label"></label><small class="text-danger">(*)</small>
+                <input asp-for="email" class="form-control" placeholder="nguyenvana@gmail.com" />
+                <span class="form-message text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="birthday" class="control-label"></label><small class="text-danger">(*)</small>
+                <input asp-for="birthday" class="form-control" type="date" />
+                <span class="form-message text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="gender" class="control-label"></label><small class="text-danger">(*)</small>
+                <select class="form-control" id="gender" asp-for="gender">
+                    <option value="true">Nam</option>
+                    <option value="false">Nữ</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="address" class="control-label"></label><small class="text-danger">(*)</small>
+                <input asp-for="address" class="form-control" placeholder="QL50, Bình Chánh, TPHCM" />
+                <span class="form-message text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="about" class="control-label"></label>
+                <input asp-for="about" class="form-control" />
+                <span class="form-message text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                @if (Model.status == true)
+                {
+                    <input class="form-check-input" type="checkbox" id="status" name="status" value="true" checked>
+                }
+                else
+                {
+                    <input class="form-check-input" type="checkbox" id="status" name="status" value="true">
+                }
+                <label class="form-check-label" for="status">Status</label>
+            </div>
+            <div class="form-group">
+                <label for="createAt" class="control-label">Create At</label>
+                <input id="createAt" class="form-control" value="@Model.createAt" disabled />
+            </div>
+            <div class="form-group">
+                <label for="updateAt" class="control-label">Update At</label>
+                <input id="updateAt" class="form-control" value="@Model.updateAt" disabled />
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <button type="submit" class="btn btn-green">Save</button>
+        <a asp-action="Index" asp-route-userId="@Model.userId" class="btn btn-light">Back to List</a>
+    </div>
+}
+
+<script src="~/js/validator.js"></script>
+<script>
+    Validator({
+        form: '#form-1',
+        formGroupSelector: '.form-group',
+        errorSelector: '.form-message',
+        rules: [
+            Validator.isRequired('#fullName'),
+            Validator.isRequired('#email'),
+            Validator.isRequired('#phoneNumber'),
+            Validator.isRequired('#birthday'),
+            Validator.isRequired('#address'),
+            Validator.isEmail('#email'),
+            Validator.isPhone('#phoneNumber')
+        ],
+    });
+</script>

@@ -1,0 +1,161 @@
+﻿@model IEnumerable<HealthCare.Entities.PatientInfo>
+
+@{
+    ViewData["Title"] = "Danh sách hồ sơ bệnh nhân";
+}
+
+<div class="container my-5">
+    <h1>@ViewData["Title"]</h1>
+
+    <p>
+        <a class="a-green" asp-action="Create">Thêm hồ sơ</a>
+    </p>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="col-6 mb-4">
+                    <div class="card border-success">
+                        <div class="card-body">
+                            <p class="card-text">
+                                <i class="fa-solid fa-circle-user"></i>@Html.DisplayNameFor(model => model.fullName):
+                                <span class="text-uppercase text-success" style="font-weight:600;">@Html.DisplayFor(modelItem => item.fullName)</span>
+                            </p>
+                            <p class="card-text"><i class="fa-solid fa-cake-candles"></i>@Html.DisplayNameFor(model => model.birthday): @Html.DisplayFor(modelItem => item.birthday)</p>
+                            <p class="card-text"><i class="fa-solid fa-phone"></i>@Html.DisplayNameFor(model => model.phoneNumber): @Html.DisplayFor(modelItem => item.phoneNumber)</p>
+                            @if (item.gender == true)
+                            {
+                                <p class="card-text"><i class="fa-solid fa-venus-mars"></i>@Html.DisplayNameFor(model => model.gender): Nam</p>
+                            }
+                            else
+                            {
+                                <p class="card-text"><i class="fa-solid fa-venus-mars"></i>@Html.DisplayNameFor(model => model.gender): Nữ</p>
+                            }
+                            <p class="card-text"><i class="fa-solid fa-location-dot"></i>@Html.DisplayNameFor(model => model.address): @Html.DisplayFor(modelItem => item.address)</p>
+                        </div>
+                        <div class="card-footer text-right">
+                            <a class="btn btn-light" asp-controller="PatientInfo" asp-action="Edit" asp-route-id="@item.patientInfoId"><i class="fa-solid fa-user-pen"></i>Sửa hồ sơ</a>
+                            <a href="#" class="btn btn-light" data-toggle="modal" data-target="#confirmModal"><i class="fa-solid fa-user-xmark"></i>Xóa hồ sơ</a>
+                            <a href="#" class="btn btn-light" data-toggle="modal" data-target="#detail_@item.patientInfoId"><i class="fa-solid fa-circle-info"></i>Xem chi tiết</a>
+                        </div>
+                    </div>
+
+                    <!-- Modal confirm delete -->
+                    <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLongTitle">Thông báo</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    Bạn có chắc muốn xóa hồ sơ bệnh nhân này?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-light" data-dismiss="modal">Đóng</button>
+                                    <form asp-action="Delete" asp-route-id="@item.patientInfoId" class="d-inline-block">
+                                        <button type="submit" class="btn btn-red">Đồng ý</button>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal chi tiết-->
+                    <div class="modal fade" id="detail_@item.patientInfoId" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header border-bottom-0">
+                                    <h5 class="modal-title text-success">Chi tiết hồ sơ</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body" style="font-weight:600;">
+                                    <div class="row">
+                                        <p class="col-4"><i class="fa-solid fa-circle-user"></i> @Html.DisplayNameFor(model => model.fullName)</p>
+                                        <p class="col-8 text-uppercase text-success" style="font-weight: 800">@Html.DisplayFor(modelItem => item.fullName)</p>
+                                    </div>
+                                    <div class="row">
+                                        <p class="col-4"><i class="fa-solid fa-cake-candles"></i>@Html.DisplayNameFor(model => model.birthday)</p>
+                                        <p class="col-8">@Html.DisplayFor(modelItem => item.birthday)</p>
+                                    </div>
+                                    <div class="row">
+                                        <p class="col-4"><i class="fa-solid fa-phone"></i>@Html.DisplayNameFor(model => model.phoneNumber)</p>
+                                        <p class="col-8">@Html.DisplayFor(modelItem => item.phoneNumber)</p>
+                                    </div>
+                                    <div class="row">
+                                        <p class="col-4"><i class="fa-solid fa-venus-mars"></i>@Html.DisplayNameFor(model => model.gender)</p>
+                                        @if (item.gender == true)
+                                        {
+                                            <p class="col-8">Nam</p>
+                                        }
+                                        else
+                                        {
+                                            <p class="col-8">Nữ</p>
+                                        }
+                                    </div>
+                                    <div class="row">
+                                        <p class="col-4"><i class="fa-solid fa-location-dot"></i>@Html.DisplayNameFor(model => model.address)</p>
+                                        <p class="col-8">@Html.DisplayFor(modelItem => item.address)</p>
+                                    </div>
+                                    <div class="row">
+                                        <p class="col-4"><i class="fa-solid fa-address-card"></i>@Html.DisplayNameFor(model => model.insurance)</p>
+                                        @if (item.insurance == "" || item.insurance == null)
+                                        {
+                                            <p class="col-8">Chưa cập nhật</p>
+                                        }
+                                        else
+                                        {
+                                            <p class="col-8">@Html.DisplayFor(modelItem => item.insurance)</p>
+                                        }
+                                    </div>
+                                    <div class="row">
+                                        <p class="col-4"><i class="fa-solid fa-id-card"></i>@Html.DisplayNameFor(model => model.nationalId)</p>
+                                        @if (item.nationalId == "" || item.nationalId == null)
+                                        {
+                                            <p class="col-8">Chưa cập nhật</p>
+                                        }
+                                        else
+                                        {
+                                            <p class="col-8">@Html.DisplayFor(modelItem => item.nationalId)</p>
+                                        }
+                                    </div>
+                                    <div class="row">
+                                        <p class="col-4"><i class="fa-solid fa-box-archive"></i>@Html.DisplayNameFor(model => model.job)</p>
+                                        @if (item.job == "" || item.job == null)
+                                        {
+                                            <p class="col-8">Chưa cập nhật</p>
+                                        }
+                                        else
+                                        {
+                                            <p class="col-8">@Html.DisplayFor(modelItem => item.job)</p>
+                                        }
+                                    </div>
+                                    <div class="row">
+                                        <p class="col-4"><i class="fa-solid fa-calendar-days"></i>@Html.DisplayNameFor(model => model.updateAt)</p>
+                                        <p class="col-8">@Html.DisplayFor(modelItem => item.updateAt)</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="text-center">
+            <h4 class="text-muted">Bạn chưa có thông tin hồ sơ bệnh nhân</h4>
+            <img src="~/img/nofile.png" style="width:50%;"/>
+        </div>
+        
+    }
+</div>
+

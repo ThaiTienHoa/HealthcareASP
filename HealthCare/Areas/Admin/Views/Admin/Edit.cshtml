@@ -1,0 +1,115 @@
+﻿@model HealthCare.Areas.Admin.Models.UserModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>UserModel</h4>
+<hr />
+@using (Html.BeginForm("Edit", "Admin", FormMethod.Post, new { @id = "form-1", @enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    
+    <div class="row">
+        <div class="col-md-4">
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="createAt" />
+
+            <div class="form-group">
+                <label asp-for="lastName" class="control-label"></label><small class="text-danger">(*)</small>
+                <input asp-for="lastName" class="form-control" />
+                <span class="form-message text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="firstName" class="control-label"></label><small class="text-danger">(*)</small>
+                <input asp-for="firstName" class="form-control" />
+                <span class="form-message text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PhoneNumber" class="control-label"></label><small class="text-danger">(*)</small>
+                <input asp-for="PhoneNumber" class="form-control" readonly />
+                <span class="form-message text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="role" class="control-label"></label><small class="text-danger">(*)</small>
+                <select asp-for="role" class="form-control" asp-items="@ViewBag.role">
+                    <option value="" selected disabled>-- Vui lòng chọn Role --</option>
+                </select>
+                <span class="form-message text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="avatar" class="control-label"></label>
+                @if (Model.avatar == "" || Model.avatar == null)
+                {
+                    <img src="~/img/avatar.png" class="img-thumbnail" style="width:100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom:10px" id="imagePreview" />
+
+                }
+                else
+                {
+                    <img src=@Url.Content(Model.avatar) class="img-thumbnail" style="width:100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom:10px" id="imagePreview" />
+                }
+                <input type="file" asp-for="avatar" class="form-control-file" accept="image/jpeg, image/png" onclick="defaultBtnActive()" />
+            </div>
+            <div class="form-group form-check">
+                @if (Model.status == true)
+                {
+                    <input class="form-check-input" type="checkbox" id="status" name="status" value="true" checked>
+                }
+                else
+                {
+                    <input class="form-check-input" type="checkbox" id="status" name="status" value="true">
+                }
+                <label class="form-check-label" for="status">Status</label>
+            </div>
+            <div class="form-group">
+                <label for="createAt" class="control-label">Create At</label>
+                <input id="createAt" class="form-control" value="@Model.createAt" disabled />
+            </div>
+            <div class="form-group">
+                <label for="updateAt" class="control-label">Update At</label>
+                <input id="updateAt" class="form-control" value="@Model.updateAt" disabled />
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <button type="submit" class="btn btn-green">Save</button>
+        <a asp-action="Index" class="btn btn-light">Back to List</a>
+    </div>
+}
+
+<script src="~/js/validator.js"></script>
+<script>
+    Validator({
+        form: '#form-1',
+        formGroupSelector: '.form-group',
+        errorSelector: '.form-message',
+        rules: [
+            Validator.isRequired('#firstName'),
+            Validator.isRequired('#lastName'),
+            Validator.isRequired('#PhoneNumber'),
+            Validator.isPhone('#PhoneNumber')
+        ],
+    });
+
+    const inputImg = document.querySelector("#avatar");
+    const img = document.querySelector("#imagePreview");
+
+    function defaultBtnActive() {
+        inputImg.change();
+    }
+    inputImg.addEventListener("change", function () {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function () {
+                const result = reader.result;
+                img.src = result;
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+</script>

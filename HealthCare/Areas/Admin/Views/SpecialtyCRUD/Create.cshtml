@@ -1,0 +1,54 @@
+﻿@model HealthCare.Entities.Specialty
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Specialty</h4>
+<hr />
+@using (Html.BeginForm("Create", "SpecialtyCRUD", FormMethod.Post, new { @id = "form-1" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="specialtyName" class="control-label"></label>
+                <input asp-for="specialtyName" class="form-control" />
+                <span class="form-message text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="order" class="control-label"></label>
+                <input asp-for="order" class="form-control" />
+                <span class="form-message text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="meta" class="control-label">Meta</label>
+                <input asp-for="meta" class="form-control" />
+                <span class="form-message text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <button type="submit" class="btn btn-green">Create</button>
+        <a asp-action="Index" class="btn btn-light">Back to List</a>
+    </div>
+}
+
+<script src="~/js/validator.js"></script>
+<script>
+    Validator({
+        form: '#form-1',
+        formGroupSelector: '.form-group',
+        errorSelector: '.form-message',
+        rules: [
+            Validator.isRequired('#specialtyName'),
+            Validator.isRequired('#order'),
+            Validator.isRequired('#meta'),
+        ],
+    });
+</script>

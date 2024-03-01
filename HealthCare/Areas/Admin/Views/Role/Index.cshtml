@@ -1,0 +1,75 @@
+﻿@model IEnumerable<HealthCare.Areas.Admin.Models.RoleModel>
+
+@{
+    ViewData["Title"] = "Danh sách Role";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a class="a-green" asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>STT</th>
+            <th>
+                @Html.DisplayNameFor(model => model.roleName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            var i = 1;
+            foreach (var item in Model)
+            {
+                <tr id="row_@item.Id">
+                    <td class="align-middle">@i</td>
+                    <td class="align-middle">
+                        @Html.DisplayFor(modelItem => item.roleName)
+                    </td>
+                    <td class="align-middle">
+                        <a asp-action="Edit" asp-route-id="@item.Id" title="Edit" class="btn btn-outline-warning">
+                            <i class="fa-solid fa-pen"></i>
+                        </a>
+                        <a href="" id="delete" data-id="@item.Id" title="Delete" class="btn btn-outline-danger">
+                            <i class="fa-solid fa-trash"></i>
+                        </a>
+                        <form asp-action="Delete" id="DeleteForm"></form>
+                    </td>
+                </tr>
+                i++;
+            }
+        }
+    </tbody>
+</table>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $('body').on('click', '#delete', function () {
+                var id = $(this).data("id");
+                var antiForgeryToken = $("#DeleteForm input[name='__RequestVerificationToken']").val();
+                var conf = confirm("Bạn có muốn xóa bản ghi này không?");
+
+                if (conf == true) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/Admin/Role/Delete',
+                        data: {
+                            __RequestVerificationToken: antiForgeryToken,
+                            id: id
+                        },
+                        success: function (data) {
+                            if (data.success) {
+                                $('#row_' + id).remove();
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+}

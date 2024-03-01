@@ -1,0 +1,75 @@
+﻿@model HealthCare.Entities.Specialty
+
+@{
+    ViewData["Title"] = "Khoa";
+}
+
+<h1>Edit</h1>
+
+<h4>Specialty</h4>
+<hr />
+@using (Html.BeginForm("Edit", "SpecialtyCRUD", FormMethod.Post, new { @id = "form-1" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="row">
+        <div class="col-md-4">
+            <input type="hidden" asp-for="specialtyId"/>
+            <input type="hidden" asp-for="createAt"/>
+
+            <div class="form-group">
+                <label asp-for="specialtyName" class="control-label"></label>
+                <input asp-for="specialtyName" class="form-control"/>
+                <span class="form-message text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="order" class="control-label"></label>
+                <input asp-for="order" class="form-control"/>
+                <span class="form-message text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="meta" class="control-label"></label>
+                <input asp-for="meta" class="form-control"/>
+                <span class="form-message text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                @if (Model.status == true)
+                {
+                    <input class="form-check-input" type="checkbox" id="status" name="status" value="true" checked>
+                } else
+                {
+                    <input class="form-check-input" type="checkbox" id="status" name="status" value="true">
+                }
+                <label class="form-check-label" for="status">Status</label>
+            </div>
+            <div class="form-group">
+                <label for="createAt" class="control-label">Create At</label>
+                <input id="createAt" class="form-control" value="@Model.createAt" disabled />
+            </div>
+            <div class="form-group">
+                <label for="updateAt" class="control-label">Update At</label>
+                <input id="updateAt" class="form-control" value="@Model.updateAt" disabled />
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <button type="submit" class="btn btn-green">Save</button>
+        <a asp-action="Index" class="btn btn-light">Back to List</a>
+    </div>
+}
+
+<script src="~/js/validator.js"></script>
+<script>
+    Validator({
+        form: '#form-1',
+        formGroupSelector: '.form-group',
+        errorSelector: '.form-message',
+        rules: [
+            Validator.isRequired('#specialtyName'),
+            Validator.isRequired('#order'),
+            Validator.isRequired('#meta'),
+        ],
+    });
+</script>

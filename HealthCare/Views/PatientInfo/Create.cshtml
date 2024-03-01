@@ -1,0 +1,96 @@
+﻿@model HealthCare.Entities.PatientInfo
+
+@{
+    ViewData["Title"] = "Tạo hồ sơ bệnh nhân";
+}
+
+<div class="container my-5">
+    <h1>@ViewData["Title"]</h1>
+    <h4>PatientInfo</h4>
+
+    <a class="a-green" asp-controller="Home" asp-action="Index">Trang chủ <i class="fa-solid fa-chevron-right"></i></a>
+    <a class="a-green" asp-controller="PatientInfo" asp-action="Index">Hồ sơ bệnh nhân <i class="fa-solid fa-chevron-right"></i></a>
+    <span>@ViewData["Title"]</span>
+    <hr />
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            @using (Html.BeginForm("Create", "PatientInfo", FormMethod.Post, new { @id = "form-1" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                <input type="hidden" asp-for="userId" value="@ViewBag.userId" />
+
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label asp-for="fullName" class="control-label"></label><small class="text-danger">(*)</small>
+                            <input asp-for="fullName" class="form-control" placeholder="Nguyễn Văn A" />
+                            <span class="form-message text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="phoneNumber" class="control-label"></label><small class="text-danger">(*)</small>
+                            <input asp-for="phoneNumber" class="form-control" placeholder="(+84)xxxxxxxxx" />
+                            <span class="form-message text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="birthday" class="control-label"></label><small class="text-danger">(*)</small>
+                            <input asp-for="birthday" type="date" class="form-control" />
+                            <span class="form-message text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="gender" class="control-label"></label><small class="text-danger">(*)</small>
+                            <select class="form-control" id="gender" asp-for="gender">
+                                <option value="true">Nam</option>
+                                <option value="false">Nữ</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label asp-for="insurance" class="control-label"></label>
+                            <input asp-for="insurance" class="form-control" placeholder="Nhập mã bảo hiểm y tế" />
+                            <span class="form-message text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="address" class="control-label"></label><small class="text-danger">(*)</small>
+                            <input asp-for="address" class="form-control" placeholder="Nhập địa chỉ của bạn" />
+                            <span class="form-message text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="nationalId" class="control-label"></label>
+                            <input asp-for="nationalId" class="form-control" placeholder="Nhập số CMND hoặc CCCD" />
+                            <span class="form-message text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="job" class="control-label"></label>
+                            <input asp-for="job" class="form-control" placeholder="Nhập nghề nghiệp của bạn" />
+                            <span class="form-message text-danger"></span>
+                        </div>
+                        <div class="form-group text-right">
+                            <button type="reset" class="btn btn-light">Nhập lại</button>
+                            <button type="submit" class="btn btn-green">Tạo mới</button>
+                        </div>
+                    </div>
+                </div>                
+            }
+        </div>
+    </div>
+</div>
+
+<script src="~/js/validator.js"></script>
+<script>
+    Validator({
+        form: '#form-1',
+        formGroupSelector: '.form-group',
+        errorSelector: '.form-message',
+        rules: [
+            Validator.isRequired('#fullName'),
+            Validator.isRequired('#phoneNumber'),
+            Validator.isRequired('#birthday'),
+            Validator.isRequired('#address'),
+            Validator.isPhone('#phoneNumber')
+        ],
+    });
+</script>
